@@ -1,7 +1,6 @@
 import { Box, Text, Flex, VStack } from "@chakra-ui/layout";
 import { Avatar } from "@chakra-ui/avatar";
 import { Link } from "react-router-dom";
-import { BsInstagram } from "react-icons/bs"
 import { CgMoreO } from "react-icons/cg"
 import { Menu, MenuButton, MenuItem, MenuList, Portal } from "@chakra-ui/react";
 import { useToast } from '@chakra-ui/react'
@@ -35,17 +34,11 @@ function UserHeader() {
                 {/* prima coloana cu numeblabla */}
                 <Box>
                     <Text fontSize={"2xl"} fontWeight={"black"}>
-                        Istvan Stefania
+                        Full Name
                     </Text>
                     <Flex gap={3} alignItems={"center"}>
-                        <Text fontSize={"sm"}>istvanstefania</Text>
-                        <Text
-                            fontSize={"xs"}
-                            bg={"gray.dark"}
-                            color={"gray.light"}
-                            p={1}
-                            borderRadius={"full"}
-                        >threads.next</Text>
+                        <Text fontSize={"sm"}>username</Text>
+                       
                     </Flex>
                 </Box>
 
@@ -62,18 +55,16 @@ function UserHeader() {
                 </Box>
             </Flex>
 
-            <Text>aicia scrie despre el</Text>
+            <Text>biografie</Text>
 
             <Flex w={"full"} justifyContent={"space-between"}>
                 <Flex gap={2} alignItems={"center"}>
-                    <Text color={"gray.light"}>3032832 urmaritori</Text>
-                    <Box w='1' h='1' bg={"gray.light"} borderRadius={"full"}></Box>
-                    <Link color={"gray.light"}>instagram.com</Link>
+                    <Text >3032832 urmaritori</Text>
+                    <Box w='1' h='1'  borderRadius={"full"}></Box>
+                    
                 </Flex>
                 <Flex>
-                    <Box className='icon-container'>
-                        <BsInstagram size={24} cursor={"pointer"} />
-                    </Box>
+                    
 
                     <Box className="icon-container">
                         <Menu>
@@ -98,17 +89,17 @@ function UserHeader() {
                     pb="3"
                     cursor={"pointer"}>
 
-                    <Text fontWeight={"bold"}>Threads</Text>
+                    <Text fontWeight={"bold"}>Posts</Text>
                 </Flex>
                 <Flex
                     flex={1}
-                    borderBottom={"1px solid gray"}
+                    borderBottom={"1px"}
                     justifyContent={"center"}
-                    color={"gray.light"}
+                    
                     pb='3'
                     cursor={"pointer"}>
 
-                    <Text fontWeight={"bold"}>Replies</Text>
+                    <Text fontWeight={"bold"}>Interactions</Text>
 
                 </Flex>
             </Flex>

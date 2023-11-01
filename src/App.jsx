@@ -9,7 +9,7 @@ function App() {
 
   return  (
    <>
-   <Container maxW="620px">
+   <Container >
     <Header />
    <Routes>
     <Route path="/:username" element={<UserPage/>}/>
