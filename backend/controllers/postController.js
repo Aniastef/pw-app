@@ -2,6 +2,7 @@ import Post from "../models/postModel.js";
 import User from "../models/userModel.js";
 
 
+
 const createPost = async (req, res) => {
 	try {
 		const { postedBy, text,img } = req.body;
