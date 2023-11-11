@@ -10,6 +10,8 @@ import HomePage from "./pages/HomePage";
 import LogoutButton from "./components/LogoutButton";
 import AuthPage from "./pages/AuthPage";
 import UpdateProfilePage from "./pages/UpdateProfilePage";
+import CreatePost from "./components/CreatePost";
+
 function App() {
 
   const user=useRecoilValue(userAtom)
@@ -30,6 +32,7 @@ function App() {
    </Routes>
 
    {user && <LogoutButton/>}
+   {user && <CreatePost/>}
    </Container>
    </>
   );

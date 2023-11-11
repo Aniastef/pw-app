@@ -165,9 +165,8 @@ export default function UpdateProfilePage() {
               bg: 'blue.500',
             }}
             type='submit'
-            
-          
-             isLoading={updating} >
+            isLoading={updating}
+             >
                Submit
           </Button>
         </Stack>
