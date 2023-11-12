@@ -10,6 +10,7 @@ const HomePage = () => {
 	const [posts, setPosts] = useState([])
 	const [loading, setLoading] = useState(true);
 	const showToast = useShowToast();
+	
 	 useEffect(() => {
 		const getFeedPosts = async () => {
 			setLoading(true);
@@ -34,7 +35,7 @@ const HomePage = () => {
 
 	return (
 <>
-{!loading && posts.length ===0 &&
+{!loading && posts.length === 0 &&
 	  <h1>Follow some users to see the feed</h1>}
 
 {loading && (

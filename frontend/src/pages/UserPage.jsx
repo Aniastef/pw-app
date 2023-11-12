@@ -30,8 +30,6 @@ const UserPage = () => {
         }
 		}
         getUser()
-
-		
 	}, [username,showToast])
 
     if(!user && loading){
@@ -44,10 +42,10 @@ const UserPage = () => {
     }
 
     
-    if(!user && loading){
+    if(!user && !loading)
         return
         <h1>User not found</h1>
-    }
+   
     
  
     

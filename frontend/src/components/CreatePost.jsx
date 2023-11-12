@@ -50,9 +50,7 @@ const [loading, setLoading] = useState(false);
 				return;
 			}
 			showToast("Success", "Post created successfully", "success");
-			// if (username === user.username) {
-			// 	setPosts([data, ...posts]);
-			// }
+			
 			onClose();
 			 setPostText("");
 			 setImgUrl("");
@@ -99,7 +97,8 @@ const [loading, setLoading] = useState(false);
                             </Text>
                             <Input type='file'
                                 hidden ref={imageRef}
-                                onChange={handleImageChange} />
+                                onChange={handleImageChange}
+                                 />
                             <BsFillImageFill
                                 style={{ marginLeft: "5px", cursor: "pointer" }}
                                 size={16}
