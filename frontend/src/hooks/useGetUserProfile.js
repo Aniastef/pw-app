@@ -13,14 +13,12 @@ const useGetUserProfile = () => {
 			try {
 				const res = await fetch(`/api/users/profile/${username}`);
 				const data = await res.json();
+				
 				if (data.error) {
 					showToast("Error", data.error, "error");
 					return;
 				}
-				if (data.isFrozen) {
-					setUser(null);
-					return;
-				}
+				
 				setUser(data);
 			} catch (error) {
 				showToast("Error", error.message, "error");

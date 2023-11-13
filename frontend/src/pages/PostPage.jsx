@@ -1,70 +1,117 @@
-import { Avatar, Flex, Image, Text, Box, Divider, Button } from "@chakra-ui/react";
+import { Avatar, Spinner,Flex, Image, Text, Box, Divider, Button } from "@chakra-ui/react";
 
 import { BsThreeDots } from "react-icons/bs";
 import Actions from "../components/Actions";
-import { useState } from 'react'
+import {useEffect, useState } from 'react'
 import Comment from "../components/Comment";
+import useGetUserProfile from "../hooks/useGetUserProfile";
+import useShowToast from "../hooks/useShowToast";
+import { useNavigate, useParams } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
+import { DeleteIcon } from "@chakra-ui/icons";
 
 const PostPage = () => {
-    const [liked, setLiked] = useState(false)
+const {user,loading}=useGetUserProfile()
+const [post,setPost]=useState(null)
+const showToast=useShowToast()
+const {pid}=useParams()
+const currentUser=useRecoilValue(userAtom)
+const navigate=useNavigate()
+
+    useEffect(() => {
+		const getPost = async () => {
+			try {
+				const res = await fetch(`/api/posts/${pid}`);
+				const data = await res.json();
+				if (data.error) {
+					showToast("Error", data.error, "error");
+					return;
+				}
+				setPost(data);
+			} catch (error) {
+				showToast("Error", error.message, "error");
+			}
+		};
+		getPost();
+	}, [showToast, pid]);
+
+    const handleDeletePost = async () => {
+		try {
+			if (!window.confirm("Are you sure you want to delete this post?")) return;
+
+			const res = await fetch(`/api/posts/${currentPost._id}`, {
+				method: "DELETE",
+			});
+			const data = await res.json();
+			if (data.error) {
+				showToast("Error", data.error, "error");
+				return;
+			}
+			showToast("Success", "Post deleted", "success");
+			navigate(`/${user.username}`);
+		} catch (error) {
+			showToast("Error", error.message, "error");
+		}
+	};
+
+
+    if (!user && loading) {
+		return (
+			<Flex justifyContent={"center"}>
+				<Spinner size={"xl"} />
+			</Flex>
+		);
+	}
+
+    if(!post) return null
+
     return (
         <>
             <Flex>
                 <Flex w={"full"} alignItems={"center"} gap={3}>
-                    <Avatar src="/four-cats.jpg" size={"md"} name='Istvan Stefania' />
+                    <Avatar src={user.profilePic} size={"md"} />
                     <Flex>
 
                         <Text fontSize={"sm"} fontWeight={"bold"}>
-                            istvanstefania
+                           {user.username}
                         </Text>
 
-                        {/* <Image src='checkmark.png' w='4' h={4} ml={4} /> */}
                     </Flex>
 
                 </Flex>
                 <Flex gap={4} alignItems={"center"}>
-                    <Text fontSize={"sm"}>
-                        1d
-                    </Text>
-
-                    <BsThreeDots />
+                   
+                {currentUser?._id === user._id && 
+<DeleteIcon size={20}
+cursor={"pointer"}
+onClick={handleDeletePost}
+/>}
+    
                 </Flex>
             </Flex>
-            <Text my={3}>pisici!</Text>
+            <Text my={3}>{post.text}</Text>
+
+{post.img && (
             <Box>
-                <Image border={"5px solid #000000"} src={"/four-cats.jpg"} />
+                <Image 
+                src={post.img} />
             </Box>
-            <Flex borderRadius={"10 px"} bgColor={"#ffffff"} my={3}>
-                <Actions liked={liked} setLiked={setLiked} />
+    )}
+            <Flex  my={3}>
+                <Actions post={post} />
             </Flex>
-            <Flex gap={2} alignItems={"center"}>
-                <Text fontSize={"sm"}>234 replies</Text>
-                <Text fontSize={"sm"}>{200 + (liked ? 1 : 0)} likes</Text>
-            </Flex>
-            <Flex justifyContent={"space-between"}>
-            </Flex>
+ 
+    {post.replies.map(reply=>(
+     <Comment 
+key={reply._id}
+reply={reply}
 
-            <Comment comment="edfsd"
-                createdAt="acum 3 ore"
-                likes={100}
-                username="user1"
-            />
+     />
 
-            <Comment comment="dsf"
-                createdAt="acum 2 ore"
-                likes={10320}
-                username="user2"
+))}
 
-            />
-            <Comment comment="dsfds"
-                createdAt="acum 2 zile"
-                likes={10230}
-                username="user3"
-
-            />
-
-
-        </>
+    </>
     );
 };
 

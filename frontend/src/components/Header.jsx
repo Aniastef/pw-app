@@ -24,8 +24,7 @@ src='/bec.png'
 cursor={"pointer"}
 alt='bec'
 w={6}
-// INTOARCE-TE CAND AI 2 iconite pt bec
-// src={colorMode==="dark" ? "/bec.png" : "/bec.png"}
+
 onClick={toggleColorMode}
 />
 {user &&(

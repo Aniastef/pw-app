@@ -1,15 +1,22 @@
 import { Avatar, Box, Flex, Text, Image } from "@chakra-ui/react"
 import { Link, useNavigate } from "react-router-dom"
-import { BsThreeDots } from "react-icons/bs"
+
 import Actions from "./Actions"
 import { useState,useEffect } from "react"
 import Comment from "./Comment"
 import useShowToast from "../hooks/useShowToast"
 
+import {DeleteIcon,ViewIcon} from "@chakra-ui/icons"
+import { useRecoilValue } from "recoil"
+import userAtom from "../atoms/userAtom"
+
 const Post = ({ post,postedBy }) => {
     const [user,setUser]=useState(null)
     const showToast=useShowToast()
 const navigate=useNavigate()
+const currentUser=useRecoilValue(userAtom)
+
+
 
     useEffect(() => {
 		const getUser = async () => {
@@ -28,6 +35,29 @@ const navigate=useNavigate()
         }
             getUser()
 		},[postedBy,showToast])
+
+        const handleDeletePost=async(e)=>{
+
+            try{
+                e.preventDefault()
+                if(!window.confirm("Are you sure you want to delete this post?"))
+                return
+
+                const res=await fetch(`/api/posts/${post._id}`,{
+                    method:"DELETE",
+                });
+                const data=await res.json()
+                if(data.error){
+                showToast("Error",data.error,"error")
+            return
+                }
+                showToast("Success","Post deleted","success")
+
+            }catch(error){
+            showToast("Error",error.message,"error")
+        }
+    
+    }
 
         if(!user) return null
 
@@ -51,7 +81,6 @@ const navigate=useNavigate()
 {post.replies[0] && (
 <Avatar
 	size='xs'
-	name='John doe'
 	src={post.replies[0].userProfilePic}
 	position={"absolute"}
 	top={"0px"}
@@ -62,7 +91,6 @@ const navigate=useNavigate()
     {post.replies[1] && (
 <Avatar
 	size='xs'
-	name='John doe'
 	src={post.replies[1].userProfilePic}
 	position={"absolute"}
 	top={"0px"}
@@ -87,10 +115,14 @@ const navigate=useNavigate()
                             <Image src='/checkmark.png' w={4} h={4} ml={1} />
                         </Flex>
                         <Flex gap={4} alignItems={"center"}>
-                            <Text fontStyle={"sm"} >1d</Text>
-                            <BsThreeDots />
+                        
+{currentUser?._id === user._id && 
+<DeleteIcon size={20}
+onClick={handleDeletePost}
+/>}
                         </Flex>
                     </Flex>
+
                     <Text fontSize={"sm"}>{post.text}</Text>
                     {post.img && (
                         <Box
@@ -101,9 +133,12 @@ const navigate=useNavigate()
                         </Box>
                     )}
                     <Flex gap={3} my={1}>
-                        {/* o sa schimbam culoarea la like cand e vector */}
+                       
                         <Actions post={post} />
                     </Flex>
+                    
+
+
                    
                 </Flex>
             </Flex>
