@@ -116,7 +116,7 @@ const currentUser=useRecoilValue(userAtom)
                         </Flex>
                         <Flex gap={4} alignItems={"center"}>
                         
-{currentUser?._id === user._id && 
+{currentUser?._id === user._id || currentUser?.isAdmin && 
 <DeleteIcon size={20}
 onClick={handleDeletePost}
 />}

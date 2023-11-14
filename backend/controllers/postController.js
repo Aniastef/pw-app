@@ -56,6 +56,9 @@ const getPost = async (req, res) => {
 	}
 };
 
+
+
+
 const deletePost = async (req, res) => {
 	try {
 		const post = await Post.findById(req.params.id);
@@ -63,7 +66,7 @@ const deletePost = async (req, res) => {
 			return res.status(404).json({ error: "Post not found" });
 		}
 
-		if (post.postedBy.toString() !== req.user._id.toString()) {
+		if (post.postedBy.toString() !== req.user._id.toString() && !req.user.isAdmin) {
 			return res.status(401).json({ error: "Unauthorized to delete post" });
 		}
 

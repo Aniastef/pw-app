@@ -34,8 +34,9 @@ const getUserProfile = async (req, res) => {
 const signupUser = async (req, res) => {
 	try {
 		const { name, email, username, password } = req.body;
+		const isAdmin = req.body.isAdmin;  
 		const user = await User.findOne({ $or: [{ email }, { username }] });
-
+console.log(isAdmin)
 		if (user) {
 			return res.status(400).json({ error: "User already exists" });
 		}
@@ -47,6 +48,7 @@ const signupUser = async (req, res) => {
 			email,
 			username,
 			password: hashedPassword,
+			isAdmin: isAdmin
 		});
 		await newUser.save();
 
@@ -58,6 +60,7 @@ const signupUser = async (req, res) => {
 				name: newUser.name,
 				email: newUser.email,
 				username:newUser.username,
+				isAdmin:newUser.isAdmin,
 			});
 		} else {
 			res.status(400).json({ error: "Invalid user data" });
@@ -80,10 +83,7 @@ const loginUser = async (req, res) => {
 
 		if (!user || !isPasswordCorrect) return res.status(400).json({ error: "Invalid username or password" });
 
-		if (user.isFrozen) {
-			user.isFrozen = false;
-			await user.save();
-		}
+		const isAdmin = user.isAdmin;
 
 		generateTokenAndSetCookie(user._id, res);
 
@@ -92,6 +92,7 @@ const loginUser = async (req, res) => {
 			name: user.name,
 			email: user.email,
 			username: user.username,
+			isAdmin:isAdmin,
 			bio: user.bio,
 			profilePic: user.profilePic,
 		});
@@ -112,6 +113,8 @@ const logoutUser = (req, res) => {
 		console.log("Error in signupUser: ", err.message);
 	}
 };
+
+
 
 const followUnFollowUser = async (req, res) => {
 	try {
@@ -142,6 +145,8 @@ const followUnFollowUser = async (req, res) => {
 		console.log("Error in followUnFollowUser: ", err.message);
 	}
 };
+
+
 
 const updateUser = async (req, res) => {
 	const { name, email, username, password,bio } = req.body;

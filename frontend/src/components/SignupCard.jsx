@@ -4,6 +4,7 @@ import {
   Flex,
   Box,
   FormControl,
+  Checkbox,
   FormLabel,
   Input,
   InputGroup,
@@ -28,17 +29,24 @@ export default function SignupCard() {
 
   const [showPassword, setShowPassword] = useState(false)
   const setAuthScreen = useSetRecoilState(authScreenAtom);
+ 
+
+
   const [inputs, setInputs] = useState({
     name: "",
     username: "",
     email: "",
     password: "",
+    isAdmin:false,
   });
 
   const showToast = useShowToast()
   const setUser = useSetRecoilState(userAtom)
 
+
   const handleSignup = async () => {
+    //console.log('isAdmin in handleSignup:', isAdmin);
+
     try {
       const res = await fetch("/api/users/signup", {
         method: "POST",
@@ -48,6 +56,7 @@ export default function SignupCard() {
         body: JSON.stringify(inputs)
       })
       const data = await res.json();
+      console.log(inputs)
 
       if (data.error) {
 
@@ -129,6 +138,15 @@ export default function SignupCard() {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
+
+            <FormLabel>
+  <Checkbox
+    isChecked={inputs.isAdmin}
+    onChange={(e) => setInputs({ ...inputs, isAdmin: e.target.checked })}
+  />
+  Register as Admin
+</FormLabel>
+
             <Stack spacing={10} pt={2}>
               <Button
                 loadingText="Submitting"

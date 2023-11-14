@@ -7,7 +7,8 @@ import { useToast,Button } from '@chakra-ui/react'
 import User from "../../../backend/models/userModel";
 import {useRecoilValue} from 'recoil'
 import userAtom from "../atoms/userAtom";
-import { BsInstagram } from "react-icons/bs";
+import { FaCrown } from "react-icons/fa";
+
 
 import { Link as RouterLink } from "react-router-dom";
 import { useState } from "react";
@@ -84,12 +85,22 @@ return (
             <Box>
                 <Text fontSize={"2xl"} fontWeight={"bold"}>
                     {user.name}
+      
                 </Text>
+                {user.isAdmin && (
+                    <Flex alignItems="center">
+                    <FaCrown color="pink" />
+                    <Text fontSize="sm" ml={1}>
+                      ADMIN
+                    </Text>
+                  </Flex>
+            
+                )
+
+                }
                 <Flex gap={2} alignItems={"center"}>
                     <Text fontSize={"sm"}>{user.username}</Text>
-                    <Text fontSize={"xs"}  p={1} borderRadius={"full"}>
-                        threads.net
-                    </Text>
+                   
                 </Flex>
             </Box>
             <Box>
