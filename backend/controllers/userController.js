@@ -7,16 +7,16 @@ import {v2 as cloudinary} from "cloudinary"
 
 const getUserProfile = async (req, res) => {
 	
-	const { query } = req.params;
+	const { username } = req.params;
 
 		try{
 			let user;
 
-			if (mongoose.Types.ObjectId.isValid(query)) {
-				user = await User.findOne({ _id: query }).select("-password").select("-updatedAt");
+			if (mongoose.Types.ObjectId.isValid(username)) {
+				user = await User.findOne({ _id: username }).select("-password").select("-updatedAt");
 			} else {
-				// query is username
-				user = await User.findOne({ username: query }).select("-password").select("-updatedAt");
+				// username e username
+				user = await User.findOne({ username: username }).select("-password").select("-updatedAt");
 			}
 
 			if (!user) return res.status(404).json({ error: "User not found" });
@@ -29,7 +29,6 @@ const getUserProfile = async (req, res) => {
 }
 
 
-//Signup User
 const signupUser = async (req, res) => {
 	try {
 		const { name, email, username, password } = req.body;
@@ -71,7 +70,6 @@ const signupUser = async (req, res) => {
 };
 
 
-//login 
 
 
 const loginUser = async (req, res) => {
@@ -102,7 +100,6 @@ const loginUser = async (req, res) => {
 };
 
 
-//logout
 const logoutUser = (req, res) => {
 	try {
 		res.cookie("jwt", "", { maxAge: 1 });
@@ -130,12 +127,12 @@ const followUnFollowUser = async (req, res) => {
 		const isFollowing = currentUser.following.includes(id);
 
 		if (isFollowing) {
-			// Unfollow user
+			//follow
 			await User.findByIdAndUpdate(id, { $pull: { followers: req.user._id } });
 			await User.findByIdAndUpdate(req.user._id, { $pull: { following: id } });
 			res.status(200).json({ message: "User unfollowed successfully" });
 		} else {
-			// Follow user
+			//unfollow
 			await User.findByIdAndUpdate(id, { $push: { followers: req.user._id } });
 			await User.findByIdAndUpdate(req.user._id, { $push: { following: id } });
 			res.status(200).json({ message: "User followed successfully" });

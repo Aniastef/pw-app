@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 import Actions from "./Actions";
 import { useState, useEffect } from "react";
-import Comment from "./Comment";
 import useShowToast from "../hooks/useShowToast";
 
 import { DeleteIcon, ViewIcon } from "@chakra-ui/icons";

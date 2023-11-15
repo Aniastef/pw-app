@@ -29,7 +29,6 @@ export default function UpdateProfilePage() {
   });
 
   const fileRef = useRef(null);
-  const [updating, setUpdating] = useState(false);
   const showToast = useShowToast();
 
   const { handleImageChange, imgUrl } = usePreviewImg();
@@ -37,8 +36,6 @@ export default function UpdateProfilePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (updating) return;
-    setUpdating(true);
     try {
       console.log(inputs);
       const res = await fetch(`/api/users/update/${user._id}`, {
@@ -62,7 +59,6 @@ export default function UpdateProfilePage() {
     } catch (error) {
       showToast("Error", error.message, "error");
     } finally {
-      setUpdating(false);
     }
   };
 
@@ -170,7 +166,6 @@ export default function UpdateProfilePage() {
                 bg: "blue.500",
               }}
               type="submit"
-              isLoading={updating}
             >
               Submit
             </Button>

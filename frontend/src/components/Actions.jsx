@@ -152,9 +152,9 @@ const Actions = ({ post: post_ }) => {
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl>
-              <FormLabel>First name</FormLabel>
+              <FormLabel>Reply</FormLabel>
               <Input
-                placeholder="Reply goes here.."
+                placeholder="..."
                 value={reply}
                 onChange={(e) => setReply(e.target.value)}
               />
