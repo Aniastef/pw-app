@@ -6,8 +6,7 @@ import generateTokenAndSetCookie from "../utils/helpers/generateTokenAndSetCooki
 import {v2 as cloudinary} from "cloudinary"
 
 const getUserProfile = async (req, res) => {
-	// We will fetch user profile either with username or userId
-	// query is either username or userId
+	
 	const { query } = req.params;
 
 		try{
@@ -35,8 +34,8 @@ const signupUser = async (req, res) => {
 	try {
 		const { name, email, username, password } = req.body;
 		const isAdmin = req.body.isAdmin;  
+
 		const user = await User.findOne({ $or: [{ email }, { username }] });
-console.log(isAdmin)
 		if (user) {
 			return res.status(400).json({ error: "User already exists" });
 		}
@@ -125,7 +124,8 @@ const followUnFollowUser = async (req, res) => {
 		if (id === req.user._id.toString())
 			return res.status(400).json({ error: "You cannot follow/unfollow yourself" });
 
-		if (!userToModify || !currentUser) return res.status(400).json({ error: "User not found" });
+		if (!userToModify || !currentUser)
+		 return res.status(400).json({ error: "User not found" });
 
 		const isFollowing = currentUser.following.includes(id);
 
@@ -147,6 +147,36 @@ const followUnFollowUser = async (req, res) => {
 };
 
 
+const deleteUser = async (req, res) => {
+	try {
+
+	  const {id}=req.params;
+	  const userToDelete = await User.findById(id);
+	  const currentUser = await User.findById(req.user._id);
+
+	  if (!currentUser.isAdmin) {
+		return res.status(403).json({ error: "Only admins can delete users" });
+	  }
+
+	  
+	  if (id === req.user._id.toString())
+	  return res.status(400).json({ error: "You cannot delete your own profile!" });
+
+	  if (!userToDelete || !currentUser) 
+	  return res.status(400).json({ error: "User not found" });
+
+  
+	  await User.findByIdAndDelete(userToDelete._id);
+	  await Post.deleteMany({ postedBy: userToDelete._id });
+  
+	  res.status(200).json({ message: "User deleted successfully" });
+	} catch (err) {
+	  res.status(500).json({ error: err.message });
+	  console.log("Error in deleteUser", err.message);
+	}
+  };
+  
+  
 
 const updateUser = async (req, res) => {
 	const { name, email, username, password,bio } = req.body;
@@ -184,19 +214,6 @@ const updateUser = async (req, res) => {
 		user.bio = bio || user.bio;
 
 		user = await user.save();
-
-		// Find all posts that this user replied and update username and userProfilePic fields
-		// await Post.updateMany(
-		// 	{ "replies.userId": userId },
-		// 	{
-		// 		$set: {
-		// 			"replies.$[reply].username": user.username,
-		// 			"replies.$[reply].userProfilePic": user.profilePic,
-		// 		},
-		// 	},
-		// 	{ arrayFilters: [{ "reply.userId": userId }] }
-		// );
-
 		
 		user.password = null;
 
@@ -256,4 +273,4 @@ const getFeedPosts = async (req, res) => {
 
 
 
-export {signupUser,loginUser,logoutUser,followUnFollowUser,updateUser,getUserProfile,replyToPost,getFeedPosts};
+export {signupUser,loginUser,deleteUser,logoutUser,followUnFollowUser,updateUser,getUserProfile,replyToPost,getFeedPosts};

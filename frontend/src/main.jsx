@@ -19,28 +19,25 @@ const styles = {
 
 const config = {
   initialColorMode: "dark",
-  useSystemColorMode: true
+  useSystemColorMode: true,
 };
 
 const colors = {
-
   light: "",
   dark: "#000000",
+};
 
-}
+const theme = extendTheme({ config, styles, colors });
 
-const theme = extendTheme({ config, styles, colors })
-
-
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <RecoilRoot>
-    <BrowserRouter>
-      <ChakraProvider theme={theme}>
-        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-        <App />
-      </ChakraProvider>
-    </BrowserRouter>
+      <BrowserRouter>
+        <ChakraProvider theme={theme}>
+          <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+          <App />
+        </ChakraProvider>
+      </BrowserRouter>
     </RecoilRoot>
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);
